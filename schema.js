@@ -23,8 +23,8 @@ const CustomerType = new GraphQLObjectType({
     fields:() => ({
         id: {type:GraphQLString},
         name: {type: GraphQLString},
-        email: {type: GraphQLString},
         age: {type: GraphQLInt},
+        hoursOfSleep: {type: GraphQLInt}
     })
 });
 
@@ -38,12 +38,6 @@ const RootQuery= new GraphQLObjectType({
                 id:{type:GraphQLString}
             },
             resolve(parentValue, args){
-
-                // for(let i = 0;i < customers.length;i++){
-                //     if(customers[i].id == args.id){
-                //         return customers[i];
-                //     }
-                // }
 
                 return axios.get('http://localhost:3000/customers/'+ args.id)
                     .then(res => res.data);
@@ -68,14 +62,14 @@ const RootQuery= new GraphQLObjectType({
             type:CustomerType,
             args:{
                 name: {type: new GraphQLNonNull(GraphQLString)},
-                email: {type: new GraphQLNonNull(GraphQLString)},
-                age: {type: new GraphQLNonNull(GraphQLInt)}
+                age: {type: new GraphQLNonNull(GraphQLInt)},
+                hoursOfSleep: {type: new GraphQLNonNull(GraphQLInt)}
             },
             resolve(parentValue, args){
                 return axios.post('http://localhost:3000/customers', {
                     name:args.name,
-                    email: args.email,
-                    age:args.age
+                    age:args.age,
+                    hoursOfSleep:args.hoursOfSleep
                 })
                 .then(res => res.data);
             }
@@ -95,8 +89,8 @@ const RootQuery= new GraphQLObjectType({
             args:{
                 id:{type: new GraphQLNonNull(GraphQLString)},
                 name: {type: GraphQLString},
-                email: {type: GraphQLString},
-                age: {type: GraphQLInt}
+                age: {type: GraphQLInt},
+                hoursOfSleep: {type: GraphQLInt}
             },
             resolve(parentValue, args){
                 return axios.patch('http://localhost:3000/customers/'+args.id, args)
